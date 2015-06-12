@@ -5,6 +5,8 @@ module.exports = {
   deleteItem: '/api/item/delete',
   archiveItem: '/api/item/archive',
   archiveAllItems: '/api/item/archiveAll',
+  searchRecipes: '/api/recipe/search',
+  addRecipeItems: '/api/recipe/add',
   register: '/auth/register',
   login: '/auth/login',
   logout: '/auth/logout',
