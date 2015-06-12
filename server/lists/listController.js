@@ -224,30 +224,31 @@ module.exports = {
   }); 
 },
 
-deleteItemFromList: function(req, res) {
-  var username = req.session.username;
-  var index = req.body.index;
+  deleteItemFromList: function(req, res) {
+    var username = req.uid;
+    var index = req.body.index;
 
-  var setModifier = {$set: {}};
-  setModifier.$set['list.' + index] = null;
-  User.update({username: username}, setModifier, {upsert: true}, function(err) {
-    if (err) {
-      console.error(err);
-      res.status(500).send({error: 'Server Error'});
-    } 
-  });
+    var setModifier = {$set: {}};
+      setModifier.$set['list.' + index] = null;
+      User.update({username: username}, setModifier, {upsert: true}, function(err) {
+        if (err) {
+          console.error(err);
+          res.status(500).send({error: 'Server Error'});
+        } 
+      });
 
-  User.findOneAndUpdate({username: username}, {$pull: {'list': null}}, {upsert: true}, function(err, user) {
-    if (err) {
-      console.error(err);
-      res.status(500).send({error: 'Server Error'});        
-    }
-    storeOrderedList(username, user.list, function(complete) {
-      if (complete) {
-        res.send(user.list);
-      } else {
-        res.status(500).send({error: 'Could not order list!'});
+    User.findOneAndUpdate({username: username}, {$pull: {'list': null}}, {upsert: true}, function(err, user) {
+      if (err) {
+        console.error(err);
+        res.status(500).send({error: 'Server Error'});        
       }
+      storeOrderedList(username, user.list, function(complete) {
+        if (complete) {
+          res.send(user.list);
+        } else {
+          res.status(500).send({error: 'Could not order list!'});
+        }
+      });
     });
   });
 },
