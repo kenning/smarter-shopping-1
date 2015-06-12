@@ -168,7 +168,6 @@ var App = Eventful.createClass({
       this.loginUser(data);
     });
     this.on('search-recipe', function(data) {
-      console.log(data);
       this.searchRecipe(data);
     });
     this.on('update-item', function(data) {
